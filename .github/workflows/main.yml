@@ -16,7 +16,7 @@ jobs:
       run: echo "ARCHIVE_NAME=${GITHUB_REPOSITORY_NAME}-$(echo $GITHUB_REF | sed 's/refs\/heads\///')-${GITHUB_SHA}.tar.gz" >> $GITHUB_ENV
 
     - name: Set Git Commit Hash
-      run: echo "GIT_COMMIT_HASH=${GITHUB_SHA}" >> $GITHUB_ENV
+      run: echo "GIT_COMMIT_HASH=${GITHUB_SHA:0:8}" >> $GITHUB_ENV
 
     - name: Prepare Staging Directory
       run: |
@@ -30,6 +30,8 @@ jobs:
     - name: Create Release
       id: create_release
       uses: actions/create-release@v1
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
       with:
         tag_name: randgen_${{ env.GIT_COMMIT_HASH }}
         release_name: randgen ${{ env.GIT_COMMIT_HASH }}
@@ -45,4 +47,4 @@ jobs:
       with:
         upload_url: ${{ steps.create_release.outputs.upload_url }}
         asset_path: ${{ env.ARCHIVE_NAME }}
-        asset_name: randgen ${{ env.GIT_COMMIT_HASH }}
+        asset_name: randgen_${{ env.GIT_COMMIT_HASH }}.tar.gz
