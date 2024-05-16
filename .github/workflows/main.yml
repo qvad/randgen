@@ -12,8 +12,11 @@ jobs:
     - name: Checkout Repository
       uses: actions/checkout@v2
 
-    - name: Setup Variables
+    - name: Set Archive name
       run: echo "ARCHIVE_NAME=${GITHUB_REPOSITORY_NAME}-$(echo $GITHUB_REF | sed 's/refs\/heads\///')-${GITHUB_SHA}.tar.gz" >> $GITHUB_ENV
+
+    - name: Set Git Commit Hash
+      run: echo "GIT_COMMIT_HASH=${GITHUB_SHA}" >> $GITHUB_ENV
 
     - name: Prepare Staging Directory
       run: |
@@ -28,8 +31,8 @@ jobs:
       id: create_release
       uses: actions/create-release@v1
       with:
-        tag_name: ssa_${{ GITHUB_SHA }}
-        release_name: rendgen ${{ GITHUB_SHA }}
+        tag_name: randgen_${{ env.GIT_COMMIT_HASH }}
+        release_name: randgen ${{ env.GIT_COMMIT_HASH }}
         body: |
           branch: ${{ github.ref_name }}
           triggered by: ${{ github.actor }}
@@ -42,4 +45,4 @@ jobs:
       with:
         upload_url: ${{ steps.create_release.outputs.upload_url }}
         asset_path: ${{ env.ARCHIVE_NAME }}
-        asset_name: ${{ env.ARCHIVE_NAME }}
+        asset_name: randgen ${{ env.GIT_COMMIT_HASH }}
