@@ -24,6 +24,18 @@ jobs:
     - name: Archive Repository
       run: tar -czvf ${ARCHIVE_NAME} -C /tmp/staging .
 
+    - name: Create Release
+      id: create_release
+      uses: actions/create-release@v1
+      with:
+        tag_name: ssa_${{ GITHUB_SHA }}
+        release_name: rendgen ${{ GITHUB_SHA }}
+        body: |
+          branch: ${{ github.ref_name }}
+          triggered by: ${{ github.actor }}
+        draft: false
+        prerelease: false
+
     - name: Upload Release Assets
       id: upload-release-asset
       uses: actions/upload-release-asset@v1
