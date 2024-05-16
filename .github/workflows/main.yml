@@ -48,3 +48,4 @@ jobs:
         upload_url: ${{ steps.create_release.outputs.upload_url }}
         asset_path: ${{ env.ARCHIVE_NAME }}
         asset_name: randgen_${{ env.GIT_COMMIT_HASH }}.tar.gz
+        asset_content_type: application/x-tar
