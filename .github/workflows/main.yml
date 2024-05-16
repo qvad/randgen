@@ -15,8 +15,14 @@ jobs:
     - name: Setup Variables
       run: echo "ARCHIVE_NAME=${GITHUB_REPOSITORY_NAME}-$(echo $GITHUB_REF | sed 's/refs\/heads\///')-${GITHUB_SHA}.tar.gz" >> $GITHUB_ENV
 
+    - name: Prepare Staging Directory
+      run: |
+        mkdir -p staging
+        cp -r ${{ github.workspace }}/* staging/
+        rm -rf staging/.git staging/var/log staging/tmp 
+    
     - name: Archive Repository
-      run: tar --exclude='.git' -czvf ${ARCHIVE_NAME} -C ${{ github.workspace }} .
+      run: tar -czvf ${ARCHIVE_NAME} -C staging .
 
     - name: Upload Archive as Artifact
       uses: actions/upload-artifact@v2
