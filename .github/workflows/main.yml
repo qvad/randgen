@@ -16,7 +16,7 @@ jobs:
       run: echo "ARCHIVE_NAME=${GITHUB_REPOSITORY_NAME}-$(echo $GITHUB_REF | sed 's/refs\/heads\///')-${GITHUB_SHA}.tar.gz" >> $GITHUB_ENV
 
     - name: Archive Repository
-      run: tar -czvf ${ARCHIVE_NAME} -C ${{ github.workspace }} .
+      run: tar --exclude='.git' -czvf ${ARCHIVE_NAME} -C ${{ github.workspace }} .
 
     - name: Upload Archive as Artifact
       uses: actions/upload-artifact@v2
