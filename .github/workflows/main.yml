@@ -17,12 +17,12 @@ jobs:
 
     - name: Prepare Staging Directory
       run: |
-        mkdir -p staging
-        cp -r ${{ github.workspace }}/* staging/
-        rm -rf staging/.git staging/var/log staging/tmp 
+        mkdir -p /tmp/staging
+        cp -r ${{ github.workspace }}/* /tmp/staging/
+        rm -rf /tmp/staging/.git /tmp/staging/var/log /tmp/staging/tmp 
     
     - name: Archive Repository
-      run: tar -czvf ${ARCHIVE_NAME} -C staging .
+      run: tar -czvf ${ARCHIVE_NAME} -C /tmp/staging .
 
     - name: Upload Archive as Artifact
       uses: actions/upload-artifact@v2
